@@ -13,7 +13,7 @@ GIT_RW_REGEX = /^git[\-](upload|receive)[\-]pack '([a-zA-Z\-_]+)([.]git)?'$/
 opts = Trollop::options do
   opt :log, "Set log file", :default => File.join(File.dirname(__FILE__), 'debug.log')
   opt :dir, "Set directory that contains git repositories", :default => ''
-  opt :readonly, "Set access to repositories under --dir to read only", :default => true
+  opt :readonly, "Set access to repositories under --dir to read only", :default => false
 end
 Trollop::die 'Directory with git repositories doesn\'t exist. Needs to be set with --dir' unless File.directory? opts[:dir]
 
