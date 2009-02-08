@@ -18,9 +18,9 @@ end
 Trollop::die 'Directory with git repositories doesn\'t exist. Needs to be set with --dir' unless File.directory? opts[:dir]
 
 logger = Logger.new(opts[:log])
-logger.level = Logger::WARN
+logger.level = Logger::DEBUG
 
-command = ENV['SSH_ORIGINAL_COMMAND']
+command = String.new(ENV['SSH_ORIGINAL_COMMAND'])
 logger.debug("Received command: #{command}")
 
 right_command = GIT_RW_REGEX
