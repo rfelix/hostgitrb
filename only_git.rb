@@ -4,9 +4,9 @@ require 'logger'
 require File.join(File.dirname(__FILE__), 'libs','trollop.rb')
 
 #Examples of commands that are permitted and that are used by git (git clone/git fetch/git push/git pull)
-#  git-upload-pack '/home/rfelixc/gitrepo/cpd/Notes'
-#  git-receive-pack '/home/rfelixc/gitrepo/cpd/Notes'
-#  git-upload-pack 'Notes'
+#  git-upload-pack '/home/user/repo/Notes.git'
+#  git-receive-pack '/home/user/repo/Notes.git'
+#  git-upload-pack 'Notes.git'
 GIT_R_REGEX = /^git[\-](upload)[\-]pack '([a-zA-Z\-_]+)([.]git)?'$/
 GIT_RW_REGEX = /^git[\-](upload|receive)[\-]pack '([a-zA-Z\-_]+)([.]git)?'$/
 
