@@ -1,6 +1,6 @@
 = HostGitRb =
 Some simple scripts to help give people access to git repositories without giving them full access via SSH
-The directory that contains these scripts should be added to the PATH variable so they can easily be accessed.
+The directory that contains these scripts should be added to the PATH variable so they can be easily accessed.
 
 == only_git.rb ==
 This script is not directly used. It's used by SSH because of the command="" line that is inserted in the ~/.ssh/authorized_keys file.
@@ -13,9 +13,14 @@ Use the -h argument to see the options.
 == Example ==
 Imagine I have a directory called /home/user/myrepos that has 2 git repos called one.git and two.git
 Now I want to allow a friend of mine to have access to those 2 repos but I don't want him to be able to login via SSH to my server.
+
 So I ask him for his public ssh key, and I execute the command 
    ./allow_git.rb -d /home/user/myrepos -f /home/user/keys/friend_rsa.pub
-Which then adds a line to ~/.ssh/authorized_keys and gives him push and pull access to repos one.git and two.git like so:
+
+Or the actual key can be passed as an argument, just don't forget the "" because of the spaces:
+   ./allow_git.rb -d /home/user/myrepos -k "ssh-rsa A.....w== user@host"
+
+This adds a line to ~/.ssh/authorized_keys and gives him push and pull access to repos one.git and two.git like so:
    git clone user@server.com:one.git
    git push origin master
    git fetch
