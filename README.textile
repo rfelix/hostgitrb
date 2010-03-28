@@ -19,20 +19,14 @@ Imagine I have a directory called /home/user/myrepos that has 2 git repos called
 Now I want to allow a friend of mine to have access to those 2 repos but I don't want him to be able to login via SSH to my server.
 
 So I ask him for his public ssh key, and I execute the command 
-<pre>
-   ./allow_git.rb -d /home/user/myrepos -f /home/user/keys/friend_rsa.pub
-</pre>
+<pre>./allow_git.rb -d /home/user/myrepos -f /home/user/keys/friend_rsa.pub</pre>
 
 Or the actual key can be passed as an argument, just don't forget the "" because of the spaces:
-<pre>
-   ./allow_git.rb -d /home/user/myrepos -k "ssh-rsa A.....w== user@host"
-</pre>
+<pre>./allow_git.rb -d /home/user/myrepos -k "ssh-rsa A.....w== user@host"</pre>
 
 This adds a line to ~/.ssh/authorized_keys and gives him push and pull access to repos one.git and two.git like so:
-<pre>
-   git clone user@server.com:one.git
-   git push origin master
-   git fetch
-   git pull
-   etc.
-</pre>
+<pre>git clone user@server.com:one.git
+git push origin master
+git fetch
+git pull
+etc.</pre>
