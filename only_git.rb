@@ -3,6 +3,8 @@
 require 'logger'
 require File.join(File.dirname(__FILE__), 'libs','trollop.rb')
 
+DEBUG_LEVEL = Logger::ERROR
+
 #Examples of commands that are permitted and that are used by git (git clone/git fetch/git push/git pull)
 #  git-upload-pack '/home/user/repo/Notes.git'
 #  git-receive-pack '/home/user/repo/Notes.git'
@@ -17,8 +19,8 @@ opts = Trollop::options do
 end
 Trollop::die 'Directory with git repositories doesn\'t exist. Needs to be set with --dir' unless File.directory? opts[:dir]
 
-logger = Logger.new(opts[:log])
-logger.level = Logger::DEBUG
+logger = Logger.new(opts[:log], 'weekly')
+logger.level = DEBUG_LEVEL
 
 command = String.new(ENV['SSH_ORIGINAL_COMMAND'])
 logger.debug("Received command: #{command}")
@@ -33,7 +35,7 @@ if command =~ right_command then
   logger.info("Executing command: #{command}")
   exec command
 else
-  logger.info("Received bad command")
+  logger.error("Received bad command")
   exec 'echo NOT ALLOWED'
 end
 
