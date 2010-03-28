@@ -34,8 +34,12 @@ end
 only_git_cmd = File.expand_path(File.join(File.dirname(__FILE__),'only_git.rb')) + " --dir #{opts[:dir]}"
 only_git_cmd << " --readonly" if opts[:readonly]
 
-ssh_cmd = ''
-ssh_cmd = "\n" if File.exists?(opts[:authorizedkeys]) && File.readlines(opts[:authorizedkeys]).last != "\n"
+ssh_inf =  "#\n"
+ssh_inf << "# only_git: #{opts[:readonly] ? 'Read-only' : 'R/W'} access to #{opts[:dir]}\n"
+ssh_inf << "#\n"
+
+ssh_cmd =  ''
+ssh_cmd =  "\n" if File.exists?(opts[:authorizedkeys]) && File.readlines(opts[:authorizedkeys]).last != "\n"
 ssh_cmd << "command=\"#{only_git_cmd}\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty #{ssh_key}"
 
-File.open(opts[:authorizedkeys], 'a+') { |f| f.write(ssh_cmd) }
+File.open(opts[:authorizedkeys], 'a+') { |f| f.write(ssh_inf + ssh_cmd) }
