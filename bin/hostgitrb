@@ -1,8 +1,8 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 
 require 'logger'
 require 'ftools'
-require File.join(File.dirname(__FILE__), 'libs','trollop.rb')
+require File.join(File.dirname(__FILE__), '..', 'vendor', 'trollop.rb')
 
 opts = Trollop.options do
   opt :file, 'Set path to public ssh key file', :default => ''

@@ -1,7 +1,7 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 
 require 'logger'
-require File.join(File.dirname(__FILE__), 'libs','trollop.rb')
+require File.join(File.dirname(__FILE__), '..', 'vendor', 'trollop.rb')
 
 DEBUG_LEVEL = Logger::ERROR
 

@@ -6,9 +6,9 @@ The directory that contains these scripts should be added to the PATH variable s
 h2. only_git.rb
 
 This script is not directly used. It's used by SSH because of the command="" line that is inserted in the ~/.ssh/authorized_keys file.
-Rather than manually adding these entries to the file, the allow_git.rb script can be used.
+Rather than manually adding these entries to the file, the @hostgitrb@ script can be used.
 
-h2. allow_git.rb
+h2. hostgitrb
 
 Adds the proper SSH command="" lines to the authorized_keys file to give access to other people.
 Use the -h argument to see the options.
