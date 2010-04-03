@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require 'rubygems'
 require 'rake'
 
@@ -12,6 +13,6 @@ HOSTGITRB_GEMSPEC = Gem::Specification.new do |spec|
       repositories without giving them full access via SSH.
     END
   spec.executables = ['hostgitrb']
-  spec.files = FileList['lib/*', 'vendor/*', 'bin/*'] + ['README.textile']
+  spec.files = FileList['lib/*', 'vendor/*', 'bin/*'] + ['Rakefile', 'README.textile']
   spec.homepage = 'http://rfelix.com/'
 end
