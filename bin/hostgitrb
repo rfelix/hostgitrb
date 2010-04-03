@@ -10,7 +10,7 @@ opts = Trollop.options do
   opt :dir, 'Set full path to directory with git repositories to allow access to', :default => ''
   opt :readonly, 'Set access to repositories in --dir to read only', :default => false
   opt :nobackup, 'Don\'t make backup of authorized_keys file', :default => false
-  opt :authorizedkeys, 'Set authorized_keys file', :default => '~/.ssh/authorized_keys'
+  opt :authorizedkeys, 'Set authorized_keys file', :default => File.expand_path('~/.ssh/authorized_keys')
 end
 Trollop::die 'Invalid directory' unless File.directory?(opts[:dir])
 Trollop::die 'No public ssh key provided' if opts[:key] == '' && !File.exists?(opts[:file])
@@ -42,4 +42,4 @@ ssh_cmd =  ''
 ssh_cmd =  "\n" if File.exists?(opts[:authorizedkeys]) && File.readlines(opts[:authorizedkeys]).last != "\n"
 ssh_cmd << "command=\"#{only_git_cmd}\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty #{ssh_key}"
 
-File.open(opts[:authorizedkeys], 'a+') { |f| f.write(ssh_inf + ssh_cmd) }
+File.open(opts[:authorizedkeys], 'a') { |f| f.write(ssh_inf + ssh_cmd) }
