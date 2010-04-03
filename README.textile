@@ -1,32 +1,53 @@
 h1. HostGitRb
 
-Some simple scripts to help give people access to git repositories without giving them full access via SSH
-The directory that contains these scripts should be added to the PATH variable so they can be easily accessed.
+By Raoul Felix
 
-h2. only_git.rb
+HostGitRb allows you to share your Git repositories with other users
+using SSH Public keys as authentication. You only need one shell account,
+which makes this great to use in a shared hosting environment, and users
+won't be able to do anything else other than push/pull to the repositories
+you define.
 
-This script is not directly used. It's used by SSH because of the command="" line that is inserted in the ~/.ssh/authorized_keys file.
-Rather than manually adding these entries to the file, the @hostgitrb@ script can be used.
+h2. Features
 
-h2. hostgitrb
+* Easy to install
+* Git Repository sharing via SSH under one user (ideal for shared hosting)
+* User permission is based on their public keys
+* You can set read/write or read-only permissions
+* Users can *only* pull/push Git repos, they can't login via SSH.
 
-Adds the proper SSH command="" lines to the authorized_keys file to give access to other people.
-Use the -h argument to see the options.
+h2. Installation
 
-h2. Example
+It's easy as pie, just login to your server and install the gem: <code>gem install hostgitrb</code>
 
-Imagine I have a directory called /home/user/myrepos that has 2 git repos called one.git and two.git
-Now I want to allow a friend of mine to have access to those 2 repos but I don't want him to be able to login via SSH to my server.
+Alternatively, clone the "HostGitRb repository":http://github.com/rfelix/hostgitrb from GitHub and add the @bin/@ directory to your @PATH@.
 
-So I ask him for his public ssh key, and I execute the command 
-<pre>./allow_git.rb -d /home/user/myrepos -f /home/user/keys/friend_rsa.pub</pre>
+h2. Usage
 
-Or the actual key can be passed as an argument, just don't forget the "" because of the spaces:
-<pre>./allow_git.rb -d /home/user/myrepos -k "ssh-rsa A.....w== user@host"</pre>
+On my blog post introducing HostGitRb, "Git Repo Hosting via SSH":http://rfelix.com/2010/04/04/git-repo-hosting-via-ssh/, I go through two use cases:
+* "Use Case 1":http://rfelix.com/2010/04/04/git-repo-hosting-via-ssh/#usecase1 - A simple scenario where I want to give a few users access to all the repositories under one project
+* "Use Case 2":http://rfelix.com/2010/04/04/git-repo-hosting-via-ssh/#usecase2 - Another scenario where a user needs to have access to a repository that's shared with another user
 
-This adds a line to ~/.ssh/authorized_keys and gives him push and pull access to repos one.git and two.git like so:
-<pre>git clone user@server.com:one.git
-git push origin master
-git fetch
-git pull
-etc.</pre>
+h2. Reference
+
+Running @hostgitrb --help@ will give you a list of possible options you can use (thanks to "Trollop":http://trollop.rubyforge.org/):
+
+<pre>
+> hostgitrb --help
+Options:
+          --file, -f <s>:  Set path to public ssh key file (default: )
+           --key, -k <s>:  Provide public ssh key as a string (default: )
+           --dir, -d <s>:  Set full path to directory with git repositories to 
+                           allow access to (default: )
+          --readonly, -r:  Set access to repositories in --dir to read only
+          --nobackup, -n:  Don't make backup of authorized_keys file
+--authorizedkeys, -a <s>:  Set authorized_keys file (default: ~/.ssh/authorized_keys)
+              --help, -h:  Show this message
+</pre>
+
+They're pretty much self-explanatory, but here are a few notes:
+* Use @--key@ when you have the SSH public key is in the clipboard (don't forget the "" due to spaces) 
+* Use @--file@ when you have the actual public key file on your server.
+* @--readonly@ makes sure the user can only execute @git pull@
+* HostGitRb makes backups of the _authorized_keys_ file it modifies; stop this with @--nobackup@
+* @--authorizedkeys@ allows you to change the file that the new permission is added to.
