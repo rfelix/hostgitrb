@@ -9,8 +9,8 @@ DEBUG_LEVEL = Logger::ERROR
 #  git-upload-pack '/home/user/repo/Notes.git'
 #  git-receive-pack '/home/user/repo/Notes.git'
 #  git-upload-pack 'Notes.git'
-GIT_R_REGEX = /^git[\-](upload)[\-]pack '([a-zA-Z\-_\/]+)([.]git)?'$/
-GIT_RW_REGEX = /^git[\-](upload|receive)[\-]pack '([a-zA-Z\-_\/]+)([.]git)?'$/
+GIT_R_REGEX = /^git[\-](upload)[\-]pack '([0-9a-zA-Z\-_\/]+)([.]git)?'$/
+GIT_RW_REGEX = /^git[\-](upload|receive)[\-]pack '([0-9a-zA-Z\-_\/]+)([.]git)?'$/
 
 opts = Trollop::options do
   opt :log, "Set log file", :default => File.join(File.dirname(__FILE__), 'debug.log')
