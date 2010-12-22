@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
       you define.
     END
   spec.executables = ['hostgitrb']
+  spec.add_development_dependency('rake')
   spec.add_development_dependency('mg')
   spec.files = Dir['lib/*', 'vendor/*', 'bin/*'] + ['Rakefile', 'README.textile']
   spec.homepage = 'http://rfelix.com/'
