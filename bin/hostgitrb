@@ -4,6 +4,15 @@ require 'logger'
 require 'ftools'
 require File.join(File.dirname(__FILE__), '..', 'vendor', 'trollop.rb')
 
+LOG_TOGGLE_FILE = File.expand_path('~/.hostgitrb.log.enabled')
+DEBUG_TOGGLE_FILE = File.expand_path('~/.hostgitrb.debug.enabled')
+
+logging_on = File.exists? LOG_TOGGLE_FILE
+debugging_on = File.exists? DEBUG_TOGGLE_FILE
+
+toggle_log_phrase = logging_on ? 'Disable' : 'Enable'
+toggle_debug_phrase = debugging_on ? 'Disable' : 'Enable'
+
 opts = Trollop.options do
   opt :file, 'Set path to public ssh key file', :default => ''
   opt :key, 'Provide public ssh key as a string', :default => ''
@@ -11,7 +20,30 @@ opts = Trollop.options do
   opt :readonly, 'Set access to repositories in --dir to read only', :default => false
   opt :nobackup, 'Don\'t make backup of authorized_keys file', :default => false
   opt :authorizedkeys, 'Set authorized_keys file', :default => File.expand_path('~/.ssh/authorized_keys')
+  opt :toggle_log, toggle_log_phrase + ' error logging to file ~/.hostgitrb.log', :default => false
+  opt :toggle_debug, toggle_debug_phrase + ' verbose debug logging to ~/.hostgitrb.log', :default => false
 end
+
+def logging_toggle(is_enabled, toggle_file)
+  if is_enabled
+    system "rm #{toggle_file}" if File.exists?(toggle_file)
+  else
+    File.open(toggle_file, 'w').close
+  end
+end
+
+if opts[:toggle_log]
+  logging_toggle(logging_on, LOG_TOGGLE_FILE)
+  puts "Logging has been switched #{logging_on ? 'OFF' : 'ON'}. Exiting..."
+  exit
+end
+
+if opts[:toggle_debug]
+  logging_toggle(debugging_on, DEBUG_TOGGLE_FILE)
+  puts "Debugging has been switched #{debugging_on ? 'OFF' : 'ON'}. Exiting..."
+  exit
+end
+
 Trollop::die 'Invalid directory' unless File.directory?(opts[:dir])
 Trollop::die 'No public ssh key provided' if opts[:key] == '' && !File.exists?(opts[:file])
 

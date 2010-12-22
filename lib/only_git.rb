@@ -3,7 +3,9 @@
 require 'logger'
 require File.join(File.dirname(__FILE__), '..', 'vendor', 'trollop.rb')
 
-DEBUG_LEVEL = Logger::ERROR
+LOG_FILE = File.expand_path('~/.hostgitrb.log')
+LOG_TOGGLE_FILE = File.expand_path('~/.hostgitrb.log.enabled')
+DEBUG_TOGGLE_FILE = File.expand_path('~/.hostgitrb.debug.enabled')
 
 #Examples of commands that are permitted and that are used by git (git clone/git fetch/git push/git pull)
 #  git-upload-pack '/home/user/repo/Notes.git'
@@ -13,14 +15,28 @@ GIT_R_REGEX = /^git[\-](upload)[\-]pack '([0-9a-zA-Z\-_\/]+)([.]git)?'$/
 GIT_RW_REGEX = /^git[\-](upload|receive)[\-]pack '([0-9a-zA-Z\-_\/]+)([.]git)?'$/
 
 opts = Trollop::options do
-  opt :log, "Set log file", :default => File.join(File.dirname(__FILE__), 'debug.log')
   opt :dir, "Set directory that contains git repositories", :default => ''
   opt :readonly, "Set access to repositories under --dir to read only", :default => false
 end
 Trollop::die 'Directory with git repositories doesn\'t exist. Needs to be set with --dir' unless File.directory? opts[:dir]
 
-logger = Logger.new(opts[:log], 'weekly')
-logger.level = DEBUG_LEVEL
+DEBUG_LEVEL = if File.exists?(DEBUG_TOGGLE_FILE)
+                 Logger::DEBUG
+              elsif File.exists?(LOG_TOGGLE_FILE)
+                Logger::ERROR
+              end
+
+if !DEBUG_LEVEL.nil?
+  logger = Logger.new(LOG_FILE, 'weekly')
+  logger.level = DEBUG_LEVEL
+else
+  class NullObjectLogger
+    def method_missing(sym, *args, &block)
+      super unless [:debug, :warn, :info, :error].include? sym
+    end
+  end
+  logger = NullObjectLogger.new
+end
 
 command = String.new(ENV['SSH_ORIGINAL_COMMAND'])
 logger.debug("Received command: #{command}")
