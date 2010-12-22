@@ -36,7 +36,7 @@ if command =~ right_command then
   exec command
 else
   logger.error("Received bad command")
-  exec 'echo NOT ALLOWED'
+  exec 'echo "Not Allowed By HostGitRb"'
 end
 
 
